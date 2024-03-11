@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.ag-theme-alpine {
+  --ag-grid-size: 1px;
+  --ag-list-item-height: 20px;
+}

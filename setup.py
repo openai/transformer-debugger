@@ -1,0 +1,32 @@
+from setuptools import find_packages, setup
+
+setup(
+    name="neuron_explainer",
+    packages=find_packages(),
+    version="0.0.1",
+    author="OpenAI",
+    install_requires=[
+        "aiohttp",
+        "blobfile",
+        "boostedblob>=0.13.0",
+        "click",
+        "fastapi==0.97",
+        "fire",
+        "httpx>=0.22",
+        "mypy==1.7.1",
+        "numpy",
+        "orjson",
+        "pre-commit",
+        "pydantic<2.0.0",
+        "pytest",
+        "pytest-asyncio",
+        "scikit-learn",
+        "starlette",
+        "tiktoken",
+        "torch>=1.13",
+        "uvicorn",
+    ],
+    url="",
+    description="",
+    python_requires=">=3.11",
+)

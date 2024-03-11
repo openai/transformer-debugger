@@ -1,0 +1,55 @@
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.ruff]
+line-length = 100
+select = [
+    "E", "F", "W", "B", "C4", "PIE", "NPY", "PLE",
+    "DTZ003", "DTZ004",
+    "G010",
+    "PLW0120", "PLW0129", "PLW0711", "PLW2101",
+    "SIM101", "SIM110", "SIM201", "SIM202", "SIM222", "SIM223",
+    "S506",
+    "RET501", "RET502",
+    "RUF006", "RUF008", "RUF011", "RUF013", "RUF016", "RUF017", "RUF200",
+    "COM818", "COM819",
+    "ISC001",
+    "PYI016", "PYI018", "PYI025",
+    "PERF102",
+    "UP006", "UP007",
+    "FURB148", "FURB163", "FURB181",
+    "ASYNC100", "ASYNC102",
+    "TID251",
+]
+ignore = [
+    "B905",
+    "E2",
+    "E402",
+    "E501",
+    "E701",
+    "E711",
+    "E731",
+    "E741",
+    "B011",
+    "C408",
+    "NPY002",
+    "PIE790",
+]
+unfixable = [
+    "F841",
+    "F601",
+    "F602",
+    "B018",
+    "SIM222",
+    "SIM223",
+    "B006",
+]
+
+target-version = "py311"
+
+[tool.ruff.lint]
+preview = true
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401", "F403"]
