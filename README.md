@@ -19,8 +19,8 @@ identification in GPT-2 small](https://arxiv.org/abs/2211.00593):
 
 - [Introduction](https://www.loom.com/share/721244075f12439496db5d53439d2f84?sid=8445200e-c49e-4028-8b8e-3ea8d361dec0)
 - [Neuron viewer pages](https://www.loom.com/share/21b601b8494b40c49b8dc7bfd1dc6829?sid=ee23c00a-9ede-4249-b9d7-c2ba15993556)
-- [Example: Investigating name mover heads](https://www.loom.com/share/3478057cec484a1b85471585fef10811?sid=b9c3be4b-7117-405a-8d31-0f9e541dcfb6)
-- [Example: Beyond name mover heads](https://www.loom.com/share/6bd8c6bde84b42a98f9a26a969d4a3ad?sid=4a09ac29-58a2-433e-b55d-762414d9a7fa)
+- [Example: Investigating name mover heads, part 1](https://www.loom.com/share/3478057cec484a1b85471585fef10811?sid=b9c3be4b-7117-405a-8d31-0f9e541dcfb6)
+- [Example: Investigating name mover heads, part 2](https://www.loom.com/share/6bd8c6bde84b42a98f9a26a969d4a3ad?sid=4a09ac29-58a2-433e-b55d-762414d9a7fa)
 
 ## What's in the release?
 
