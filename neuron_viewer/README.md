@@ -60,4 +60,4 @@ Be sure to run the following to validate any changes you make:
 
 ```sh
 npm run check-type-warnings && npm run check-code-format && npm run build
-``
+```
