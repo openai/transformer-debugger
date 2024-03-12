@@ -9,7 +9,7 @@ techniques with [sparse autoencoders](https://transformer-circuits.pub/2023/mono
 TDB enables rapid exploration before needing to write code, with the ability to intervene in the
 forward pass and see how it affects a particular behavior. It can be used to answer questions like,
 "Why does the model output token A instead of token B for this prompt?" or "Why does attention head
-H to attend to token T for this prompt?" It does so by identifying specific components (neurons,
+H attend to token T for this prompt?" It does so by identifying specific components (neurons,
 attention heads, autoencoder latents) that contribute to the behavior, showing automatically
 generated explanations of what causes those components to activate most strongly, and tracing
 connections between components to help discover circuits.
