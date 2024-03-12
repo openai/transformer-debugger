@@ -84,7 +84,7 @@ See [datasets.md](../../datasets.md) for more details.
 ### Example usage - with Transformer Debugger
 
 - see [Neuron Viewer](../../neuron_viewer/README.md) for instructions on how to start a Neuron Viewer or a Transformer Debugger with autoencoders.
-- see [Activation Server](../neuron_explainer/activation_server/README.md) for instructions on how to start an Activation Server with autoencoders.
+- see [Activation Server](../../neuron_explainer/activation_server/README.md) for instructions on how to start an Activation Server with autoencoders.
 
 
 ### Example usage - with transformer hooks
