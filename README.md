@@ -31,7 +31,7 @@ identification in GPT-2 small](https://arxiv.org/abs/2211.00593):
 
 ## Setup
 
-Follow these steps to install the repo.  You'll first need python/pip, as well as node/npm.
+Follow these steps to install the repo.  You'll first need python/pip, as well as node/npm. Requires `Python >= 3.11`
 
 Though optional, we recommend you use a virtual environment or equivalent:
 
