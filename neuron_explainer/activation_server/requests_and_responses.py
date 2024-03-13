@@ -202,7 +202,9 @@ TensorND = Union[Tensor0D, Tensor1D, Tensor2D, Tensor3D]
 class ModelInfoResponse(CamelCaseBaseModel):
     model_name: str | None
     has_mlp_autoencoder: bool
+    mlp_autoencoder_name: str | None
     has_attention_autoencoder: bool
+    attention_autoencoder_name: str | None
     n_layers: int
 
 
