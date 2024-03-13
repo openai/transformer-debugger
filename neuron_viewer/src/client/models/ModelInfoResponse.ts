@@ -12,6 +12,8 @@
 export type ModelInfoResponse = {
   modelName?: string;
   hasMlpAutoencoder: boolean;
+  mlpAutoencoderName?: string;
   hasAttentionAutoencoder: boolean;
+  attentionAutoencoderName?: string;
   nLayers: number;
 };

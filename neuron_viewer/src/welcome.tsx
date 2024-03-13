@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { dstStringToNodeType } from "./types";
 import { NeuronDatasetMetadata } from "./client";
 import { readNeuronDatasetsMetadata } from "./requests/readRequests";
+import { getModelInfo } from "./requests/inferenceRequests";
 
 const Welcome: React.FC = () => {
   // Keys are dataset keys returned by getDatasetKey; values are user-written strings of the form
   // "{layerIndex}:{nodeIndex}".
   const [inputValues, setInputValues] = useState<{ [dataset: string]: string }>({});
   const [datasetsMetadata, setDatasetsMetadata] = useState<NeuronDatasetMetadata[] | null>(null);
+  const [tdbUrl, setTdbUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -17,6 +19,18 @@ const Welcome: React.FC = () => {
     async function fetchData() {
       try {
         const result = await readNeuronDatasetsMetadata();
+        const modelInfo = await getModelInfo();
+        if (modelInfo.modelName ?? false) {
+          if (modelInfo.hasMlpAutoencoder && modelInfo.hasAttentionAutoencoder) {
+            setTdbUrl(`/${modelInfo.modelName}_${modelInfo.mlpAutoencoderName}_${modelInfo.attentionAutoencoderName}/tdb_alpha`);
+          } else if (modelInfo.hasMlpAutoencoder) {
+            setTdbUrl(`/${modelInfo.modelName}_${modelInfo.mlpAutoencoderName}/tdb_alpha`);
+          } else if (modelInfo.hasAttentionAutoencoder) {
+            setTdbUrl(`/${modelInfo.modelName}_${modelInfo.attentionAutoencoderName}/tdb_alpha`);
+          } else {
+            setTdbUrl(`/${modelInfo.modelName}/tdb_alpha`);
+          }
+        }
         setErrorMessage(null);
         setDatasetsMetadata(result);
         setIsLoading(false);
@@ -92,6 +106,9 @@ const Welcome: React.FC = () => {
                 </>
               )}
             </div>
+            {tdbUrl && (
+              <a href={tdbUrl} className="text-4xl font-bold mb-4 w-[400px]">Link to Transformer Debugger</a>
+            )}
           </div>
         </ul>
       </div>

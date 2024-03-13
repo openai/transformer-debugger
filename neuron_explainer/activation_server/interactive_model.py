@@ -239,12 +239,16 @@ class InteractiveModel:
             for node_type in self._multi_autoencoder_context.autoencoder_context_by_node_type.keys()
         )
 
-    def get_model_info(self) -> ModelInfoResponse:
+    def get_model_info(
+        self, mlp_autoencoder_name: str | None, attn_autoencoder_name: str | None
+    ) -> ModelInfoResponse:
         return ModelInfoResponse(
             model_name=self._standard_model_context.model_name,
             has_mlp_autoencoder=self.has_mlp_autoencoder,
             has_attention_autoencoder=self.has_attention_autoencoder,
             n_layers=self._standard_model_context.n_layers,
+            mlp_autoencoder_name=mlp_autoencoder_name,
+            attention_autoencoder_name=attn_autoencoder_name,
         )
 
     def encode(self, string: str) -> list[int]:

@@ -17,7 +17,12 @@ from neuron_explainer.activation_server.requests_and_responses import (
 )
 
 
-def define_inference_routes(app: FastAPI, model: InteractiveModel | None) -> None:
+def define_inference_routes(
+    app: FastAPI,
+    model: InteractiveModel | None,
+    mlp_autoencoder_name: str | None,
+    attn_autoencoder_name: str | None,
+) -> None:
     def assert_model() -> None:
         if model is None:
             raise HTTPException(
@@ -71,4 +76,6 @@ def define_inference_routes(app: FastAPI, model: InteractiveModel | None) -> Non
     def model_info() -> ModelInfoResponse:
         assert_model()
         assert model is not None  # redundant; needed for mypy
-        return model.get_model_info()
+        return model.get_model_info(
+            mlp_autoencoder_name=mlp_autoencoder_name, attn_autoencoder_name=attn_autoencoder_name
+        )

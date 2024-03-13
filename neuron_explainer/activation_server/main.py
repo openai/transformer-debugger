@@ -171,7 +171,12 @@ def main(
         neuron_method_id=neuron_method_id,
         attention_head_method_id=attention_head_method_id,
     )
-    define_inference_routes(app, model)
+    define_inference_routes(
+        app=app,
+        model=model,
+        mlp_autoencoder_name=mlp_autoencoder_name,
+        attn_autoencoder_name=attn_autoencoder_name,
+    )
 
     # TODO(sbills): Make reload=True work. We need to pass something like "main:app" as a string
     # rather than passing a FastAPI object directly.
