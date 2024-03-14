@@ -8,6 +8,7 @@ import blobfile as bf
 import boostedblob as bbb
 
 from neuron_explainer.fast_dataclasses import FastDataclass, loads, register_dataclass
+from neuron_explainer.file_utils import file_exists
 
 
 @register_dataclass
@@ -217,7 +218,7 @@ class NeuronRecord(FastDataclass):
 def neuron_exists(dataset_path: str, layer: str | int, neuron: str | int) -> bool:
     """Return whether the specified neuron exists."""
     file = bf.join(dataset_path, str(layer), f"{neuron}.json")
-    return bf.exists(file)
+    return file_exists(file)
 
 
 def load_neuron(dataset_path: str, layer: str | int, neuron: str | int) -> NeuronRecord:

@@ -5,6 +5,7 @@ import blobfile as bf
 import pytest
 import torch
 
+from neuron_explainer.file_utils import file_exists
 from neuron_explainer.models import Transformer
 
 SRC_TEST_DATA_FNAME = "https://openaipublic.blob.core.windows.net/neuron-explainer/test-data/test-reference-data/test_data.pt"
@@ -47,7 +48,7 @@ def test_pretrained_models_against_reference_data(model_name: str) -> None:
     by checking their outputs on random data against reference data from huggingface models.
     """
 
-    if not bf.exists(DST_TEST_DATA_FNAME):
+    if not file_exists(DST_TEST_DATA_FNAME):
         bf.copy(SRC_TEST_DATA_FNAME, DST_TEST_DATA_FNAME)
     else:
         print(f"Test data already exists, reusing.  Run `rm {DST_TEST_DATA_FNAME}` to redownload.")

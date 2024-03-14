@@ -14,6 +14,7 @@ import boostedblob as bbb
 
 from neuron_explainer.activations.activations import NeuronId
 from neuron_explainer.fast_dataclasses import FastDataclass, loads, register_dataclass
+from neuron_explainer.file_utils import file_exists
 
 
 class ActivationScale(str, Enum):
@@ -259,7 +260,7 @@ def load_neuron_explanations(
 ) -> NeuronSimulationResults | None:
     """Load scored explanations for the specified neuron."""
     file = bf.join(explanations_path, str(layer_index), f"{neuron_index}.jsonl")
-    if not bf.exists(file):
+    if not file_exists(file):
         return None
     with bf.BlobFile(file) as f:
         for line in f:
@@ -280,7 +281,7 @@ async def load_neuron_explanations_async(
 @bbb.ensure_session
 async def read_file(filename: str) -> str | None:
     """Read the contents of the given file as a string, asynchronously. File can be a
-    local file or an Azure blob."""
+    local file or a remote file."""
     try:
         raw_contents = await bbb.read.read_single(filename)
     except FileNotFoundError:

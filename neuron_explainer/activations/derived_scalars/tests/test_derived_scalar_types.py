@@ -20,6 +20,7 @@ from neuron_explainer.activations.derived_scalars.tests.utils import (
     get_activation_shape,
     get_autoencoder_test_path,
 )
+from neuron_explainer.file_utils import file_exists
 from neuron_explainer.models import Autoencoder
 from neuron_explainer.models.autoencoder_context import AutoencoderConfig, AutoencoderContext
 from neuron_explainer.models.model_component_registry import NodeType, PassType
@@ -100,7 +101,7 @@ def _get_autoencoder_test_path_maybe_saving_new_autoencoder(
 
     autoencoder_path = get_autoencoder_test_path(dst)
 
-    if bf.exists(autoencoder_path):
+    if file_exists(autoencoder_path):
         return autoencoder_path
 
     # create autoencoder

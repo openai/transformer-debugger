@@ -16,6 +16,7 @@ from torch import Tensor
 from torch.distributions.categorical import Categorical
 from torch.utils.checkpoint import checkpoint
 
+from neuron_explainer.file_utils import file_exists
 from neuron_explainer.models.hooks import (
     AttentionHooks,
     MLPHooks,
@@ -697,11 +698,11 @@ class Transformer(nn.Module):
         simplify: bool = False,
         simplify_kwargs: dict[str, Any] | None = None,
     ) -> "Transformer":
-        if bf.exists(name_or_path):
+        if file_exists(name_or_path):
             path = name_or_path
         else:
             path = f"https://openaipublic.blob.core.windows.net/neuron-explainer/subject-models/{name_or_path.replace('-', '/')}"
-        if not bf.exists(path):
+        if not file_exists(path):
             raise FileNotFoundError(f"Could not find model at {name_or_path}.")
         xf = cls.from_checkpoint(
             path,

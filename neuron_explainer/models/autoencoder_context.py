@@ -6,6 +6,7 @@ import blobfile as bf
 import torch
 
 from neuron_explainer.activations.derived_scalars.derived_scalar_types import DerivedScalarType
+from neuron_explainer.file_utils import file_exists
 from neuron_explainer.models import Autoencoder
 from neuron_explainer.models.model_component_registry import Dimension, LayerIndex, NodeType
 
@@ -98,7 +99,7 @@ class AutoencoderContext:
                     "/tmp", autoencoder_azure_path.replace("https://", "")
                 )
                 os.makedirs(os.path.dirname(disk_cache_path), exist_ok=True)
-                if bf.exists(disk_cache_path):
+                if file_exists(disk_cache_path):
                     print(f"Loading autoencoder from disk cache: {disk_cache_path}")
                 else:
                     print(f"Reading autoencoder from blob storage: {autoencoder_azure_path}")
