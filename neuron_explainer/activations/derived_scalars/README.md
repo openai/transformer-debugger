@@ -55,7 +55,7 @@ The key classes to understand are:
 
 - Contains `ActivationsAndMetadata` stored from a forward and possibly a backward pass, separated by `ActivationLocationType` and `PassType`.
 
-#### `DerivedScalarStore`: 
+#### `DerivedScalarStore`
 
 - Contains `ActivationsAndMetadata` computed from a `RawActivationStore`, separated by `DerivedScalarType` and `PassType`.
 
@@ -119,7 +119,7 @@ When defining a new `ScalarDeriver` that does not correspond to an `ActivationLo
 
 ## How to define a new `DerivedScalarType`
 
-1. Add a new `DerivedScalarType` to the Enum in [scalar_deriver.py](../../../neuron_explainer/activations/derived_scalars/scalar_deriver.py):
+1. Add a new `DerivedScalarType` to the Enum in [scalar_deriver.py](../../../neuron_explainer/activations/derived_scalars/scalar_deriver.py).
 
 2. Add a specification of its intended shape per token sequence to `shape_spec_per_token_sequence_by_dst` (e.g. does it contain a separate dimension for attended-to sequence tokens? Is it per-attention head or per-MLP neuron?)
 
