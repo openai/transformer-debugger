@@ -67,7 +67,7 @@ The module is a slightly modified version of `https://github.com/openai/sparse_a
 ### Trained autoencoder files
 
 Trained autoencoder files (saved as torch state-dicts) are located at the following paths:
-`az://openaipublic/sparse-autoencoder/gpt2-small/{autoencoder_input}{version}/autoencoders/{layer_index}.pt`
+`https://openaipublic.blob.core.windows.net/sparse-autoencoder/gpt2-small/{autoencoder_input}{version}/autoencoders/{layer_index}.pt`
 
 with the following parameters:
 - `autoencoder_input` is in ["mlp_post_act", "resid_delta_mlp", "resid_delta_attn"]
@@ -76,8 +76,8 @@ with the following parameters:
 
 ### Collated activation datasets
 
-Note: collated activation datasets located at `az://openaipublic/sparse-autoencoder/gpt2-small` are not compatible with Transformer Debugger. Use the following datasets instead:
-`az://openaipublic/neuron-explainer/gpt2-small/autoencoder_latent/{autoencoder_input}{version}/collated-activations/{layer_index}/{latent_index}.json`
+Note: collated activation datasets located at `https://openaipublic.blob.core.windows.net/sparse-autoencoder/gpt2-small` are not compatible with Transformer Debugger. Use the following datasets instead:
+`https://openaipublic.blob.core.windows.net/neuron-explainer/gpt2-small/autoencoder_latent/{autoencoder_input}{version}/collated-activations/{layer_index}/{latent_index}.json`
 
 See [datasets.md](../../datasets.md) for more details.
 
@@ -106,7 +106,7 @@ from neuron_explainer.models.transformer import Transformer
 layer_index = 0  # in range(12)
 autoencoder_input = ["mlp_post_act", "resid_delta_mlp", "resid_delta_attn"][1]
 version = ["", "_v4"][1]
-filename = f"az://openaipublic/sparse-autoencoder/gpt2-small/{autoencoder_input}{version}/autoencoders/{layer_index}.pt"
+filename = f"https://openaipublic.blob.core.windows.net/sparse-autoencoder/gpt2-small/{autoencoder_input}{version}/autoencoders/{layer_index}.pt"
 with bf.BlobFile(filename, mode="rb") as f:
     print(f"Loading autoencoder..")
     state_dict = torch.load(f)

@@ -24,8 +24,8 @@ from neuron_explainer.models.model_component_registry import (
 from neuron_explainer.models.model_context import StandardModelContext
 
 REFERENCE_DS_STORE_PATH_BY_GRAD_LOCATION = {
-    "mlp": "az://openaipublic/neuron-explainer/test-data/reference_ds_stores/test_all_dsts_reference_ds_store.pt",
-    "attn": "az://openaipublic/neuron-explainer/test-data/reference_ds_stores/attn/test_all_dsts_reference_ds_store.pt",
+    "mlp": "https://openaipublic.blob.core.windows.net/neuron-explainer/test-data/reference_ds_stores/test_all_dsts_reference_ds_store.pt",
+    "attn": "https://openaipublic.blob.core.windows.net/neuron-explainer/test-data/reference_ds_stores/attn/test_all_dsts_reference_ds_store.pt",
 }
 
 

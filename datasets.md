@@ -9,8 +9,8 @@ The activations datasets are located on Azure Blob Storage, for example accessib
 Collated activation datasets are available for both the MLP neurons and the attention heads. MLP neuron activations are recorded for each token, while attention head activations are recorded for each token pair. 
 
 The datasets are located at the following paths:
-> - MLP neurons: `az://openaipublic/neuron-explainer/gpt2_small_data/collated-activations/{layer_index}/{neuron_index}.json`
-> - Attention heads: `az://openaipublic/neuron-explainer/gpt2_small/attn_write_norm/collated-activations-by-token-pair/{layer_index}/{head_index}.json`
+> - MLP neurons: `https://openaipublic.blob.core.windows.net/neuron-explainer/gpt2_small_data/collated-activations/{layer_index}/{neuron_index}.json`
+> - Attention heads: `https://openaipublic.blob.core.windows.net/neuron-explainer/gpt2_small/attn_write_norm/collated-activations-by-token-pair/{layer_index}/{head_index}.json`
 
 with the following parameters:
 - `layer_index` is in range(12)
@@ -24,7 +24,7 @@ MLP autoencoders were trained either on the MLP neurons (after the activation fu
 
 The datasets are located at the following paths:
 
-> - MLP latents: `az://openaipublic/neuron-explainer/gpt2-small/autoencoder_latent/{autoencoder_input}{version}/collated-activations/{layer_index}/{latent_index}.pt`
+> - MLP latents: `https://openaipublic.blob.core.windows.net/neuron-explainer/gpt2-small/autoencoder_latent/{autoencoder_input}{version}/collated-activations/{layer_index}/{latent_index}.pt`
 
 with the following parameters:
 - `autoencoder_input` is in ["mlp_post_act", "resid_delta_mlp"]
@@ -38,8 +38,8 @@ Attention autoencoders were trained on the attention-layer output that is writte
 
 The datasets are located at the following paths:
 
-> - Attention latents (by token): `az://openaipublic/neuron-explainer/gpt2-small/autoencoder_latent/resid_delta_attn_v4/collated-activations/{layer_index}/{latent_index}.pt`
-> - Attention latents (by token pair): `az://openaipublic/neuron-explainer/gpt2-small/autoencoder_latent/resid_delta_attn_v4/collated-activations-by-token-pair/{layer_index}/{latent_index}.pt`
+> - Attention latents (by token): `https://openaipublic.blob.core.windows.net/neuron-explainer/gpt2-small/autoencoder_latent/resid_delta_attn_v4/collated-activations/{layer_index}/{latent_index}.pt`
+> - Attention latents (by token pair): `https://openaipublic.blob.core.windows.net/neuron-explainer/gpt2-small/autoencoder_latent/resid_delta_attn_v4/collated-activations-by-token-pair/{layer_index}/{latent_index}.pt`
 
 with the following parameters:
 - `layer_index` is in range(12)
@@ -50,7 +50,7 @@ with the following parameters:
 # GPT-2 xl
 
 For GPT-2 xl, only the MLP neurons activations are available. The datasets are located at the following paths:
-> - MLP neurons: `az://openaipublic/neuron-explainer/data/collated-activations/{layer_index}/{neuron_index}.json`
+> - MLP neurons: `https://openaipublic.blob.core.windows.net/neuron-explainer/data/collated-activations/{layer_index}/{neuron_index}.json`
 
 with the following parameters:
 - `layer_index` is in range(48)

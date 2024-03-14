@@ -41,55 +41,55 @@ register_neuron_dataset_metadata(
     short_name="gpt2-xl",
     derived_scalar_type="mlp_post_act",
     user_visible_name="GPT-2 XL - MLP neurons",
-    neuron_dataset_path="az://openaipublic/neuron-explainer/data/collated-activations/",
+    neuron_dataset_path="https://openaipublic.blob.core.windows.net/neuron-explainer/data/collated-activations/",
 )
 register_neuron_dataset_metadata(
     short_name="gpt2-small",
     derived_scalar_type="mlp_post_act",
     user_visible_name="GPT-2 small - MLP neurons",
-    neuron_dataset_path="az://openaipublic/neuron-explainer/gpt2_small_data/collated-activations/",
+    neuron_dataset_path="https://openaipublic.blob.core.windows.net/neuron-explainer/gpt2_small_data/collated-activations/",
 )
 register_neuron_dataset_metadata(
     short_name="gpt2-small",
     derived_scalar_type="attn_write_norm",
     user_visible_name="GPT-2 small - Attention write by token pair",
-    neuron_dataset_path="az://openaipublic/neuron-explainer/gpt2_small/attn_write_norm/collated-activations-by-token-pair",
+    neuron_dataset_path="https://openaipublic.blob.core.windows.net/neuron-explainer/gpt2_small/attn_write_norm/collated-activations-by-token-pair",
 )
 register_neuron_dataset_metadata(
     short_name="gpt2-small_ae-mlp-post-act-v1",
     derived_scalar_type="mlp_autoencoder_latent",
     user_visible_name="GPT-2 small - MLP autoencoder (post-act) v1",
-    neuron_dataset_path="az://openaipublic/neuron-explainer/gpt2_small/autoencoder_latent/mlp_post_act_v1/collated-activations",
+    neuron_dataset_path="https://openaipublic.blob.core.windows.net/neuron-explainer/gpt2_small/autoencoder_latent/mlp_post_act_v1/collated-activations",
 )
 register_neuron_dataset_metadata(
     short_name="gpt2-small_ae-resid-delta-mlp-v1",
     derived_scalar_type="mlp_autoencoder_latent",
     user_visible_name="GPT-2 small - MLP autoencoder (write) v1",
-    neuron_dataset_path="az://openaipublic/neuron-explainer/gpt2_small/autoencoder_latent/resid_delta_mlp_v1/collated-activations",
+    neuron_dataset_path="https://openaipublic.blob.core.windows.net/neuron-explainer/gpt2_small/autoencoder_latent/resid_delta_mlp_v1/collated-activations",
 )
 register_neuron_dataset_metadata(
     short_name="gpt2-small_ae-mlp-post-act-v4",
     derived_scalar_type="mlp_autoencoder_latent",
     user_visible_name="GPT-2 small - MLP autoencoder (post-act) v4",
-    neuron_dataset_path="az://openaipublic/neuron-explainer/gpt2_small/autoencoder_latent/mlp_post_act_v4/collated-activations",
+    neuron_dataset_path="https://openaipublic.blob.core.windows.net/neuron-explainer/gpt2_small/autoencoder_latent/mlp_post_act_v4/collated-activations",
 )
 register_neuron_dataset_metadata(
     short_name="gpt2-small_ae-resid-delta-mlp-v4",
     derived_scalar_type="mlp_autoencoder_latent",
     user_visible_name="GPT-2 small - MLP autoencoder (write) v4",
-    neuron_dataset_path="az://openaipublic/neuron-explainer/gpt2_small/autoencoder_latent/resid_delta_mlp_v4/collated-activations",
+    neuron_dataset_path="https://openaipublic.blob.core.windows.net/neuron-explainer/gpt2_small/autoencoder_latent/resid_delta_mlp_v4/collated-activations",
 )
 register_neuron_dataset_metadata(
     short_name="gpt2-small_ae-resid-delta-attn-v4",
     derived_scalar_type="attention_autoencoder_latent",
     user_visible_name="GPT-2 small - Attention autoencoder (write) v4",
-    neuron_dataset_path="az://openaipublic/neuron-explainer/gpt2_small/autoencoder_latent/resid_delta_attn_v4/collated-activations",
+    neuron_dataset_path="https://openaipublic.blob.core.windows.net/neuron-explainer/gpt2_small/autoencoder_latent/resid_delta_attn_v4/collated-activations",
 )
 register_neuron_dataset_metadata(
     short_name="gpt2-small_ae-resid-delta-attn-v4",
     derived_scalar_type="flattened_attn_write_to_latent_summed_over_heads",
     user_visible_name="GPT-2 small - Attention autoencoder (write) v4 by token pair",
-    neuron_dataset_path="az://openaipublic/neuron-explainer/gpt2_small/autoencoder_latent/resid_delta_attn_v4/collated-activations-by-token-pair",
+    neuron_dataset_path="https://openaipublic.blob.core.windows.net/neuron-explainer/gpt2_small/autoencoder_latent/resid_delta_attn_v4/collated-activations-by-token-pair",
 )
 
 
@@ -105,7 +105,9 @@ def get_neuron_dataset_metadata_by_short_name_and_dst(
 
     if metadata is None:
         error_message = f"Could not find collated activation dataset for {name_and_type}. Available datasets are: "
-        error_message += ", ".join(f"(\"{short_name}\", \"{dst}\")" for (short_name, dst) in NEURON_DATASET_METADATA_REGISTRY)
+        error_message += ", ".join(
+            f'("{short_name}", "{dst}")' for (short_name, dst) in NEURON_DATASET_METADATA_REGISTRY
+        )
 
         if short_name.endswith("_undefined"):
             # This is likely due to the URL not providing the correct autoencoder name

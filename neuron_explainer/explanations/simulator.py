@@ -838,7 +838,9 @@ if __name__ == "__main__":
     from neuron_explainer.activations.activations import load_neuron
 
     neuron = load_neuron(
-        "az://openaipublic/neuron-explainer/data/collated-activations/", "21", "2932"
+        "https://openaipublic.blob.core.windows.net/neuron-explainer/data/collated-activations/",
+        "21",
+        "2932",
     )
     client = ApiClient(model_name="gpt-4", max_concurrent=5)
 

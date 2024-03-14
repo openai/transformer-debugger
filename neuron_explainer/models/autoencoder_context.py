@@ -94,7 +94,9 @@ class AutoencoderContext:
                 autoencoder = self._cached_autoencoders_by_path[autoencoder_azure_path]
             else:
                 # Check if the autoencoder is cached on disk
-                disk_cache_path = os.path.join("/tmp", autoencoder_azure_path.replace("az://", ""))
+                disk_cache_path = os.path.join(
+                    "/tmp", autoencoder_azure_path.replace("https://", "")
+                )
                 os.makedirs(os.path.dirname(disk_cache_path), exist_ok=True)
                 if bf.exists(disk_cache_path):
                     print(f"Loading autoencoder from disk cache: {disk_cache_path}")

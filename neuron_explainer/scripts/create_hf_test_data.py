@@ -105,7 +105,7 @@ def create_hf_test_data(
     "-dir",
     "--savedir",
     type=str,
-    default="az://openaipublic/neuron-explainer/data/test-reference-data",
+    default="https://openaipublic.blob.core.windows.net/neuron-explainer/data/test-reference-data",
 )
 @click.option("-n", "--num_examples", type=int, default=4)
 @click.option("-m", "--sample_len", type=int, default=50)

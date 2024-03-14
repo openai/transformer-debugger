@@ -700,7 +700,7 @@ class Transformer(nn.Module):
         if bf.exists(name_or_path):
             path = name_or_path
         else:
-            path = f"az://openaipublic/neuron-explainer/subject-models/{name_or_path.replace('-', '/')}"
+            path = f"https://openaipublic.blob.core.windows.net/neuron-explainer/subject-models/{name_or_path.replace('-', '/')}"
         if not bf.exists(path):
             raise FileNotFoundError(f"Could not find model at {name_or_path}.")
         xf = cls.from_checkpoint(

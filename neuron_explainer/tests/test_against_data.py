@@ -7,9 +7,7 @@ import torch
 
 from neuron_explainer.models import Transformer
 
-SRC_TEST_DATA_FNAME = (
-    "az://openaipublic/neuron-explainer/test-data/test-reference-data/test_data.pt"
-)
+SRC_TEST_DATA_FNAME = "https://openaipublic.blob.core.windows.net/neuron-explainer/test-data/test-reference-data/test_data.pt"
 DST_TEST_DATA_FNAME = "/tmp/neuron_explainer_reference_test_data.pt"
 
 REFERENCE_MODELS = [
