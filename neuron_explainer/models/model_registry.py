@@ -19,16 +19,16 @@ class StandardModelSpec:
 _MODEL_SPECS: dict[str, StandardModelSpec] = {
     # GPT-2 series
     "gpt2-small": StandardModelSpec(
-        model_path="az://openaipublic/neuron-explainer/subject-models/gpt2/small"
+        model_path="https://openaipublic.blob.core.windows.net/neuron-explainer/subject-models/gpt2/small"
     ),
     "gpt2-medium": StandardModelSpec(
-        model_path="az://openaipublic/neuron-explainer/subject-models/gpt2/medium"
+        model_path="https://openaipublic.blob.core.windows.net/neuron-explainer/subject-models/gpt2/medium"
     ),
     "gpt2-large": StandardModelSpec(
-        model_path="az://openaipublic/neuron-explainer/subject-models/gpt2/large"
+        model_path="https://openaipublic.blob.core.windows.net/neuron-explainer/subject-models/gpt2/large"
     ),
     "gpt2-xl": StandardModelSpec(
-        model_path="az://openaipublic/neuron-explainer/subject-models/gpt2/xl"
+        model_path="https://openaipublic.blob.core.windows.net/neuron-explainer/subject-models/gpt2/xl"
     ),
 }
 
@@ -38,14 +38,14 @@ _AUTOENCODER_SPECS: dict[str, dict[str, AutoencoderSpec]] = {
         "ae-mlp-post-act-v1": AutoencoderSpec(
             dst=DerivedScalarType.MLP_POST_ACT,
             autoencoder_path_by_layer_index={
-                layer_index: f"az://openaipublic/sparse-autoencoder/gpt2-small/mlp_post_act/autoencoders/{layer_index}.pt"
+                layer_index: f"https://openaipublic.blob.core.windows.net/sparse-autoencoder/gpt2-small/mlp_post_act/autoencoders/{layer_index}.pt"
                 for layer_index in range(12)
             },
         ),
         "ae-resid-delta-mlp-v1": AutoencoderSpec(
             dst=DerivedScalarType.RESID_DELTA_MLP,
             autoencoder_path_by_layer_index={
-                layer_index: f"az://openaipublic/sparse-autoencoder/gpt2-small/resid_delta_mlp/autoencoders/{layer_index}.pt"
+                layer_index: f"https://openaipublic.blob.core.windows.net/sparse-autoencoder/gpt2-small/resid_delta_mlp/autoencoders/{layer_index}.pt"
                 for layer_index in range(12)
             },
         ),
@@ -53,21 +53,21 @@ _AUTOENCODER_SPECS: dict[str, dict[str, AutoencoderSpec]] = {
         "ae-mlp-post-act-v4": AutoencoderSpec(
             dst=DerivedScalarType.MLP_POST_ACT,
             autoencoder_path_by_layer_index={
-                layer_index: f"az://openaipublic/sparse-autoencoder/gpt2-small/mlp_post_act_v4/autoencoders/{layer_index}.pt"
+                layer_index: f"https://openaipublic.blob.core.windows.net/sparse-autoencoder/gpt2-small/mlp_post_act_v4/autoencoders/{layer_index}.pt"
                 for layer_index in range(12)
             },
         ),
         "ae-resid-delta-mlp-v4": AutoencoderSpec(
             dst=DerivedScalarType.RESID_DELTA_MLP,
             autoencoder_path_by_layer_index={
-                layer_index: f"az://openaipublic/sparse-autoencoder/gpt2-small/resid_delta_mlp_v4/autoencoders/{layer_index}.pt"
+                layer_index: f"https://openaipublic.blob.core.windows.net/sparse-autoencoder/gpt2-small/resid_delta_mlp_v4/autoencoders/{layer_index}.pt"
                 for layer_index in range(12)
             },
         ),
         "ae-resid-delta-attn-v4": AutoencoderSpec(
             dst=DerivedScalarType.RESID_DELTA_ATTN,
             autoencoder_path_by_layer_index={
-                layer_index: f"az://openaipublic/sparse-autoencoder/gpt2-small/resid_delta_attn_v4/autoencoders/{layer_index}.pt"
+                layer_index: f"https://openaipublic.blob.core.windows.net/sparse-autoencoder/gpt2-small/resid_delta_attn_v4/autoencoders/{layer_index}.pt"
                 for layer_index in range(12)
             },
         ),

@@ -12,7 +12,6 @@ DerivedScalarIndex objects.
 from dataclasses import asdict
 from typing import Any, Callable
 
-import blobfile as bf
 import numpy as np
 import torch
 
@@ -31,7 +30,8 @@ from neuron_explainer.activations.derived_scalars.indexing import (
     NodeIndex,
 )
 from neuron_explainer.activations.derived_scalars.scalar_deriver import ScalarDeriver
-from neuron_explainer.models.model_component_registry import Dimension, LayerIndex, NodeType
+from neuron_explainer.file_utils import CustomFileHandler
+from neuron_explainer.models.model_component_registry import Dimension, NodeType
 from neuron_explainer.pydantic import CamelCaseBaseModel, immutable
 
 
@@ -599,7 +599,7 @@ class DerivedScalarStore:
         return cls(activations_and_metadata_by_dst_and_pass_type)
 
     def save_to_file(self, path: str) -> None:
-        with bf.BlobFile(path, "wb") as f:
+        with CustomFileHandler(path, "wb") as f:
             torch.save(
                 self.to_dict(),
                 f,
@@ -609,7 +609,7 @@ class DerivedScalarStore:
     def load_from_file(
         cls, path: str, map_location: torch.device | None = None, skip_missing_dsts: bool = False
     ) -> "DerivedScalarStore":
-        with bf.BlobFile(path, "rb") as f:
+        with CustomFileHandler(path, "rb") as f:
             serialized_data = torch.load(f, map_location=map_location)
         return cls.from_dict(serialized_data, skip_missing_dsts)
 

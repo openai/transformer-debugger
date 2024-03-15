@@ -246,7 +246,7 @@ if __name__ == "__main__":
         scorer = AttentionHeadOneAtATimeScorer("gpt-4")
         explanation = "attends from tokens to the first token in the sequence"
         attention_head = load_neuron(
-            "az://openaipublic/neuron-explainer/gpt2_small/attn_write_norm/collated_activations_by_token_pair",
+            "https://openaipublic.blob.core.windows.net/neuron-explainer/gpt2_small/attn_write_norm/collated_activations_by_token_pair",
             "0",
             "5",
         )

@@ -1,10 +1,10 @@
 from typing import Any
 
-import blobfile as bf
 import click
 import torch
 from transformers import GPT2Tokenizer
 
+from neuron_explainer.file_utils import copy_to_local_cache
 from neuron_explainer.scripts.download_from_hf import get_hf_model
 
 # ==============================
@@ -105,7 +105,7 @@ def create_hf_test_data(
     "-dir",
     "--savedir",
     type=str,
-    default="az://openaipublic/neuron-explainer/data/test-reference-data",
+    default="https://openaipublic.blob.core.windows.net/neuron-explainer/data/test-reference-data",
 )
 @click.option("-n", "--num_examples", type=int, default=4)
 @click.option("-m", "--sample_len", type=int, default=50)
@@ -123,7 +123,7 @@ def make_and_save_test_data(
         last_n=last_n,
     )
     torch.save(test_data, "test_data.pt")
-    bf.copy(src="test_data.pt", dst="/".join([savedir, "test_data.pt"]), overwrite=True)
+    copy_to_local_cache(src="test_data.pt", dst="/".join([savedir, "test_data.pt"]))
 
 
 if __name__ == "__main__":

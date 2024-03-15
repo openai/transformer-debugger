@@ -19,7 +19,7 @@ class NodeIdAndDatasets(CamelCaseBaseModel):
 
 
 def resolve_neuron_dataset(dataset: str, dst: DerivedScalarType) -> str:
-    if dataset.startswith("az://"):
+    if dataset.startswith("https://"):
         return dataset
     else:
         # It's the short name for a dataset, like "gpt2-small". We have to look up the metadata.
@@ -28,7 +28,7 @@ def resolve_neuron_dataset(dataset: str, dst: DerivedScalarType) -> str:
 
 
 def convert_dataset_path_to_short_name(dataset_path: str) -> str:
-    assert dataset_path.startswith("az://")
+    assert dataset_path.startswith("https://")
     short_name = None
     for metadata in NEURON_DATASET_METADATA_REGISTRY.values():
         if metadata.neuron_dataset_path == dataset_path:

@@ -11,7 +11,7 @@ def get_autoencoder_test_path(
     """Return the path to a test autoencoder."""
 
     name = f"{dst.value}.pt"
-    return f"az://openaipublic/neuron-explainer/test-data/autoencoder_test_state_dicts/{name}"
+    return f"https://openaipublic.blob.core.windows.net/neuron-explainer/test-data/autoencoder_test_state_dicts/{name}"
 
 
 def get_activation_shape(

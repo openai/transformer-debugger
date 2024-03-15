@@ -2,10 +2,10 @@ import os
 from dataclasses import dataclass, field
 from typing import Union
 
-import blobfile as bf
 import torch
 
 from neuron_explainer.activations.derived_scalars.derived_scalar_types import DerivedScalarType
+from neuron_explainer.file_utils import copy_to_local_cache, file_exists
 from neuron_explainer.models import Autoencoder
 from neuron_explainer.models.model_component_registry import Dimension, LayerIndex, NodeType
 
@@ -94,14 +94,14 @@ class AutoencoderContext:
                 autoencoder = self._cached_autoencoders_by_path[autoencoder_azure_path]
             else:
                 # Check if the autoencoder is cached on disk
-                disk_cache_path = os.path.join("/tmp", autoencoder_azure_path.replace("az://", ""))
-                os.makedirs(os.path.dirname(disk_cache_path), exist_ok=True)
-                if bf.exists(disk_cache_path):
+                disk_cache_path = os.path.join(
+                    "/tmp", autoencoder_azure_path.replace("https://", "")
+                )
+                if file_exists(disk_cache_path):
                     print(f"Loading autoencoder from disk cache: {disk_cache_path}")
                 else:
                     print(f"Reading autoencoder from blob storage: {autoencoder_azure_path}")
-                    # Cache the autoencoder to disk, using bf.copy to make sure md5 is preserved
-                    bf.copy(autoencoder_azure_path, disk_cache_path, overwrite=True)
+                    copy_to_local_cache(autoencoder_azure_path, disk_cache_path)
 
                 state_dict = torch.load(disk_cache_path, map_location=self.device)
                 # released autoencoders are saved as a dict for better compatibility

@@ -7,8 +7,6 @@ setup(
     author="OpenAI",
     install_requires=[
         "aiohttp",
-        "blobfile",
-        "boostedblob>=0.13.0",
         "click",
         "fastapi==0.97",
         "fire",

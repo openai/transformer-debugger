@@ -4,8 +4,8 @@ from neuron_explainer.activation_server.load_neurons import convert_dataset_path
 
 # Maps from neuron dataset path to explanation dataset path.
 AZURE_EXPLANATION_DATASET_REGISTRY = {
-    "az://openaipublic/neuron-explainer/data/collated-activations/": "az://openaipublic/neuron-explainer/data/explanations/",
-    "az://openaipublic/neuron-explainer/gpt2_small_data/collated-activations/": "az://openaipublic/neuron-explainer/gpt2_small_data/explanations/",
+    "https://openaipublic.blob.core.windows.net/neuron-explainer/data/collated-activations/": "https://openaipublic.blob.core.windows.net/neuron-explainer/data/explanations/",
+    "https://openaipublic.blob.core.windows.net/neuron-explainer/gpt2_small_data/collated-activations/": "https://openaipublic.blob.core.windows.net/neuron-explainer/gpt2_small_data/explanations/",
 }
 
 
@@ -21,7 +21,7 @@ async def get_all_explanation_datasets(neuron_dataset: str) -> list[str]:
     """
     Get all explanation datasets for a given neuron dataset. Search the public azure bucket and also
     the local filesystem cache. Returns a list of paths to the explanation datasets.
-    Path can be an azure path (beginning with `az://`) or a local path.
+    Path can be an azure path (beginning with `https://`) or a local path.
     """
     datasets = []
     if neuron_dataset in AZURE_EXPLANATION_DATASET_REGISTRY:

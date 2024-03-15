@@ -1,10 +1,11 @@
 import json
+import os.path as osp
 
-import blobfile as bf
 import click
 import torch
 from transformers import GPT2LMHeadModel
 
+from neuron_explainer.file_utils import CustomFileHandler
 from neuron_explainer.models.transformer import TransformerConfig
 
 EXCLUDES = [".attn.bias", ".attn.masked_bias"]
@@ -91,13 +92,13 @@ def download(model_name: str, save_dir: str) -> None:
 
     print(f"Saving model to {save_dir}...")
     # save to file with config
-    pieces_path = bf.join(save_dir, model_name, "model_pieces")
+    pieces_path = osp.join(save_dir, model_name, "model_pieces")
     for k, v in sd.items():
-        with bf.BlobFile(bf.join(pieces_path, f"{k}.pt"), "wb") as f:
+        with CustomFileHandler(osp.join(pieces_path, f"{k}.pt"), "wb") as f:
             torch.save(v, f)
 
-    fname_cfg = bf.join(save_dir, model_name, "config.json")
-    with bf.BlobFile(fname_cfg, "w") as f:
+    fname_cfg = osp.join(save_dir, model_name, "config.json")
+    with CustomFileHandler(fname_cfg, "w") as f:
         f.write(json.dumps(cfg.__dict__))
 
 
