@@ -1,11 +1,10 @@
 import warnings
 from dataclasses import dataclass
 
-import blobfile as bf
 import pytest
 import torch
 
-from neuron_explainer.file_utils import file_exists
+from neuron_explainer.file_utils import CustomFileHandler, copy_to_local_cache, file_exists
 from neuron_explainer.models import Transformer
 
 SRC_TEST_DATA_FNAME = "https://openaipublic.blob.core.windows.net/neuron-explainer/test-data/test-reference-data/test_data.pt"
@@ -49,10 +48,10 @@ def test_pretrained_models_against_reference_data(model_name: str) -> None:
     """
 
     if not file_exists(DST_TEST_DATA_FNAME):
-        bf.copy(SRC_TEST_DATA_FNAME, DST_TEST_DATA_FNAME)
+        copy_to_local_cache(SRC_TEST_DATA_FNAME, DST_TEST_DATA_FNAME)
     else:
         print(f"Test data already exists, reusing.  Run `rm {DST_TEST_DATA_FNAME}` to redownload.")
-    with bf.BlobFile(DST_TEST_DATA_FNAME, "rb") as f:
+    with CustomFileHandler(DST_TEST_DATA_FNAME, "rb") as f:
         test_data = torch.load(f)
     data = test_data[model_name]
 

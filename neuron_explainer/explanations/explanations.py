@@ -5,16 +5,16 @@ from __future__ import annotations
 
 import json
 import math
+import os.path as osp
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
-import blobfile as bf
 import boostedblob as bbb
 
 from neuron_explainer.activations.activations import NeuronId
 from neuron_explainer.fast_dataclasses import FastDataclass, loads, register_dataclass
-from neuron_explainer.file_utils import file_exists
+from neuron_explainer.file_utils import CustomFileHandler, file_exists, read_single_async
 
 
 class ActivationScale(str, Enum):
@@ -259,10 +259,10 @@ def load_neuron_explanations(
     explanations_path: str, layer_index: str | int, neuron_index: str | int
 ) -> NeuronSimulationResults | None:
     """Load scored explanations for the specified neuron."""
-    file = bf.join(explanations_path, str(layer_index), f"{neuron_index}.jsonl")
+    file = osp.join(explanations_path, str(layer_index), f"{neuron_index}.jsonl")
     if not file_exists(file):
         return None
-    with bf.BlobFile(file) as f:
+    with CustomFileHandler(file) as f:
         for line in f:
             return loads(line)
     return None
@@ -274,7 +274,7 @@ async def load_neuron_explanations_async(
 ) -> NeuronSimulationResults | None:
     """Load scored explanations for the specified neuron, asynchronously."""
     return await read_explanation_file(
-        bf.join(explanations_path, str(layer_index), f"{neuron_index}.jsonl")
+        osp.join(explanations_path, str(layer_index), f"{neuron_index}.jsonl")
     )
 
 
@@ -283,7 +283,7 @@ async def read_file(filename: str) -> str | None:
     """Read the contents of the given file as a string, asynchronously. File can be a
     local file or a remote file."""
     try:
-        raw_contents = await bbb.read.read_single(filename)
+        raw_contents = await read_single_async(filename)
     except FileNotFoundError:
         return None
     lines = []
@@ -306,13 +306,3 @@ async def read_json_file(filename: str) -> dict | None:
     """Read the contents of the given file as a JSON object, asynchronously."""
     line = await read_file(filename)
     return json.loads(line) if line is not None else None
-
-
-def get_sorted_neuron_indices_from_explanations(
-    explanations_path: str, layer: str | int
-) -> list[int]:
-    """Return the indices of all neurons in this layer, in ascending order."""
-    layer_dir = bf.join(explanations_path, str(layer))
-    return sorted(
-        [int(f.split(".")[0]) for f in bf.listdir(layer_dir) if f.split(".")[0].isnumeric()]
-    )

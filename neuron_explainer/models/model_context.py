@@ -2,11 +2,11 @@ import os
 from abc import ABC, abstractmethod
 from typing import Any
 
-import blobfile as bf
 import tiktoken
 import torch
 import torch.nn as nn
 
+from neuron_explainer.file_utils import CustomFileHandler
 from neuron_explainer.models import Transformer, TransformerConfig
 from neuron_explainer.models.inference_engine_type_registry import InferenceEngineType
 from neuron_explainer.models.model_component_registry import (
@@ -290,7 +290,7 @@ class StandardModelContext(ModelContext):
         split = info.get("split")
         reshape = info.get("reshape")
         if self._cached_transformer is None:
-            with bf.BlobFile(f"{self.load_path}/model_pieces/{part}.pt", "rb") as f:
+            with CustomFileHandler(f"{self.load_path}/model_pieces/{part}.pt", "rb") as f:
                 weight = torch.load(f, map_location=device or self.device)
         else:
             weight = self._cached_transformer.state_dict()[part].to(device or self.device)

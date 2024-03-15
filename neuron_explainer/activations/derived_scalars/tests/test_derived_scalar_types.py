@@ -1,4 +1,3 @@
-import blobfile as bf
 import pytest
 import torch
 
@@ -20,7 +19,7 @@ from neuron_explainer.activations.derived_scalars.tests.utils import (
     get_activation_shape,
     get_autoencoder_test_path,
 )
-from neuron_explainer.file_utils import file_exists
+from neuron_explainer.file_utils import CustomFileHandler, file_exists
 from neuron_explainer.models import Autoencoder
 from neuron_explainer.models.autoencoder_context import AutoencoderConfig, AutoencoderContext
 from neuron_explainer.models.model_component_registry import NodeType, PassType
@@ -119,7 +118,7 @@ def _get_autoencoder_test_path_maybe_saving_new_autoencoder(
     autoencoder.latent_bias.data[:] = 100.0
 
     # save autoencoder
-    with bf.BlobFile(autoencoder_path, "wb") as f:
+    with CustomFileHandler(autoencoder_path, "wb") as f:
         print(f"Saving autoencoder to {autoencoder_path}")
         torch.save(autoencoder.state_dict(), f)
 

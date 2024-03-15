@@ -1,4 +1,5 @@
 import json
+import os
 import os.path as osp
 import pickle
 from concurrent.futures import ThreadPoolExecutor
@@ -7,7 +8,6 @@ from dataclasses import asdict, dataclass
 from functools import cache
 from typing import Any, Self, Union
 
-import blobfile as bf
 import numpy as np
 import tiktoken
 import torch
@@ -16,7 +16,7 @@ from torch import Tensor
 from torch.distributions.categorical import Categorical
 from torch.utils.checkpoint import checkpoint
 
-from neuron_explainer.file_utils import file_exists
+from neuron_explainer.file_utils import CustomFileHandler, copy_to_local_cache, file_exists
 from neuron_explainer.models.hooks import (
     AttentionHooks,
     MLPHooks,
@@ -43,10 +43,10 @@ class SerializableDataclass:
 
     def save(self, path: str) -> None:
         if path.endswith((".pkl", ".pickle")):
-            with bf.BlobFile(path, "wb") as f:
+            with CustomFileHandler(path, "wb") as f:
                 pickle.dump(self.to_dict(), f)
         elif path.endswith(".json"):
-            with bf.BlobFile(path, "w") as f:
+            with CustomFileHandler(path, "w") as f:
                 json.dump(self.to_dict(), f)
         else:
             raise ValueError(f"Unknown file extension for {path}")
@@ -54,10 +54,10 @@ class SerializableDataclass:
     @classmethod
     def load(cls, path: str) -> Self:
         if path.endswith((".pkl", ".pickle")):
-            with bf.BlobFile(path, "rb") as f:
+            with CustomFileHandler(path, "rb") as f:
                 return cls.from_dict(pickle.load(f))
         elif path.endswith(".json"):
-            with bf.BlobFile(path, "r") as f:
+            with CustomFileHandler(path, "r") as f:
                 return cls.from_dict(json.load(f))
         else:
             raise ValueError(f"Unknown file extension for {path}")
@@ -698,12 +698,10 @@ class Transformer(nn.Module):
         simplify: bool = False,
         simplify_kwargs: dict[str, Any] | None = None,
     ) -> "Transformer":
-        if file_exists(name_or_path):
+        if name_or_path.startswith("https://"):
             path = name_or_path
         else:
             path = f"https://openaipublic.blob.core.windows.net/neuron-explainer/subject-models/{name_or_path.replace('-', '/')}"
-        if not file_exists(path):
-            raise FileNotFoundError(f"Could not find model at {name_or_path}.")
         xf = cls.from_checkpoint(
             path,
             device=device,
@@ -723,21 +721,15 @@ class Transformer(nn.Module):
 
         pieces_path = osp.join(path, "model_pieces")
         for k, v in self.state_dict().items():
-            with bf.BlobFile(osp.join(pieces_path, f"{k}.pt"), "wb") as f:
+            with CustomFileHandler(osp.join(pieces_path, f"{k}.pt"), "wb") as f:
                 torch.save(v, f)
 
     def load_state_from_checkpoint(
         self, path: str, device: Device | None = None, dtype: torch.dtype | None = None
     ):
         pieces_path = osp.join(path, "model_pieces")
-        piece_files = list(bf.listdir(pieces_path))
-        expected_piece_names = set(self.state_dict().keys())
-        actual_piece_names = {f[: -len(".pt")] for f in piece_files}
-        assert expected_piece_names == actual_piece_names, (
-            f"Incorrect pieces at {path}\n\n"
-            + f"Missing pieces: {expected_piece_names - actual_piece_names}\n\n"
-            + f"Extra pieces: {actual_piece_names - expected_piece_names}"
-        )
+        piece_names = set(self.state_dict().keys())
+        piece_files = [f"{k}.pt" for k in piece_names]
 
         if dtype is not None:
             assert isinstance(dtype, torch.dtype), "Must provide valid dtype."
@@ -769,9 +761,18 @@ class Transformer(nn.Module):
 def _load_piece(
     file_path: str, device: Device, dtype: torch.dtype | None
 ) -> tuple[str, torch.Tensor]:
-    with bf.BlobFile(
-        file_path, "rb", cache_dir="/tmp/neuron-explainer-model-pieces-cache", streaming=False
-    ) as f:
+    disk_cache_path = osp.join(
+        "/tmp/neuron-explainer-model-pieces-cache", file_path.replace("https://", "")
+    )
+    os.makedirs(osp.dirname(disk_cache_path), exist_ok=True)
+    if file_exists(disk_cache_path):
+        file_path_to_use = disk_cache_path
+    else:
+        file_path_to_use = file_path
+        # Inefficient: we do two reads here, one to cache locally and another to load the tensor.
+        copy_to_local_cache(file_path, disk_cache_path)
+
+    with CustomFileHandler(file_path_to_use, "rb") as f:
         t = torch.load(f, map_location=device)
         if dtype is not None:
             t = t.to(dtype)

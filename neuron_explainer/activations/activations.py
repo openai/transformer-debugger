@@ -2,13 +2,13 @@
 # helper functions.
 
 import math
+import os.path as osp
 from dataclasses import dataclass, field
 
-import blobfile as bf
 import boostedblob as bbb
 
 from neuron_explainer.fast_dataclasses import FastDataclass, loads, register_dataclass
-from neuron_explainer.file_utils import file_exists
+from neuron_explainer.file_utils import CustomFileHandler, file_exists, read_single_async
 
 
 @register_dataclass
@@ -217,14 +217,14 @@ class NeuronRecord(FastDataclass):
 
 def neuron_exists(dataset_path: str, layer: str | int, neuron: str | int) -> bool:
     """Return whether the specified neuron exists."""
-    file = bf.join(dataset_path, str(layer), f"{neuron}.json")
+    file = osp.join(dataset_path, str(layer), f"{neuron}.json")
     return file_exists(file)
 
 
 def load_neuron(dataset_path: str, layer: str | int, neuron: str | int) -> NeuronRecord:
     """Load the NeuronRecord for the specified neuron."""
-    file = bf.join(dataset_path, str(layer), f"{neuron}.json")
-    with bf.BlobFile(file, "r") as f:
+    file = osp.join(dataset_path, str(layer), f"{neuron}.json")
+    with CustomFileHandler(file, "r") as f:
         neuron_record = loads(f.read(), backwards_compatible=True)
         neuron_record.neuron_id.layer_index = int(
             neuron_record.neuron_id.layer_index
@@ -239,30 +239,15 @@ def load_neuron(dataset_path: str, layer: str | int, neuron: str | int) -> Neuro
 @bbb.ensure_session
 async def load_neuron_async(dataset_path: str, layer: str | int, neuron: str | int) -> NeuronRecord:
     """Async version of load_neuron."""
-    file = bf.join(dataset_path, str(layer), f"{neuron}.json")
+    file = osp.join(dataset_path, str(layer), f"{neuron}.json")
     return await read_neuron_file(file)
 
 
 @bbb.ensure_session
 async def read_neuron_file(neuron_filename: str) -> NeuronRecord:
     """Like load_neuron_async, but takes a raw neuron filename."""
-    raw_contents = await bbb.read.read_single(neuron_filename)
+    raw_contents = await read_single_async(neuron_filename)
     neuron_record = loads(raw_contents.decode("utf-8"), backwards_compatible=True)
     if not isinstance(neuron_record, NeuronRecord):
         raise ValueError("Stored data incompatible with current version of NeuronRecord dataclass.")
     return neuron_record
-
-
-def get_sorted_neuron_indices(dataset_path: str, layer: str | int) -> list[int]:
-    """Returns the indices of all neurons in this layer, in ascending order."""
-    layer_dir = bf.join(dataset_path, str(layer))
-    return sorted(
-        [int(f.split(".")[0]) for f in bf.listdir(layer_dir) if f.split(".")[0].isnumeric()]
-    )
-
-
-def get_sorted_layers(dataset_path: str) -> list[str]:
-    """
-    Return the indices of all layers in this dataset, in ascending numerical order, as strings.
-    """
-    return [str(x) for x in sorted([int(x) for x in bf.listdir(dataset_path) if x.isnumeric()])]

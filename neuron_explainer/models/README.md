@@ -94,9 +94,9 @@ Here, we provide a simple example showing how to extract neuron/attention activa
 
 
 ```py
-import blobfile as bf
 import torch
 
+from neuron_explainer.file_utils import CustomFileHandler
 from neuron_explainer.models.autoencoder import Autoencoder
 from neuron_explainer.models.hooks import TransformerHooks
 from neuron_explainer.models.model_context import get_default_device
@@ -107,7 +107,7 @@ layer_index = 0  # in range(12)
 autoencoder_input = ["mlp_post_act", "resid_delta_mlp", "resid_delta_attn"][1]
 version = ["", "_v4"][1]
 filename = f"https://openaipublic.blob.core.windows.net/sparse-autoencoder/gpt2-small/{autoencoder_input}{version}/autoencoders/{layer_index}.pt"
-with bf.BlobFile(filename, mode="rb") as f:
+with CustomFileHandler(filename, mode="rb") as f:
     print(f"Loading autoencoder..")
     state_dict = torch.load(f)
     autoencoder = Autoencoder.from_state_dict(state_dict, strict=False)

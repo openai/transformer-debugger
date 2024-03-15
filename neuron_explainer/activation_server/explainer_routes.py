@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 import os
+import os.path as osp
 from enum import Enum, unique
 from typing import Any, TypeVar
 
-import blobfile as bf
 from fastapi import FastAPI, HTTPException
 
 from neuron_explainer.activation_server.explanation_datasets import (
@@ -40,7 +40,7 @@ from neuron_explainer.explanations.scoring import (
     make_uncalibrated_explanation_simulator,
 )
 from neuron_explainer.fast_dataclasses.fast_dataclasses import dumps, loads
-from neuron_explainer.file_utils import file_exists
+from neuron_explainer.file_utils import file_exists, read_single_async
 from neuron_explainer.models.model_component_registry import NodeType
 from neuron_explainer.pydantic import CamelCaseBaseModel, immutable
 
@@ -158,7 +158,7 @@ def define_explainer_routes(
     def _get_azure_explanation_path(request: NodeIdAndDatasets, dataset_path: str) -> str | None:
         if dataset_path in AZURE_EXPLANATION_DATASET_REGISTRY:
             expl_dir = AZURE_EXPLANATION_DATASET_REGISTRY[dataset_path]
-            return bf.join(expl_dir, str(request.layer_index), f"{request.activation_index}.jsonl")
+            return osp.join(expl_dir, str(request.layer_index), f"{request.activation_index}.jsonl")
         return None
 
     def _get_local_cached_explanation_path(request: NodeIdAndDatasets, dataset_path: str) -> str:
@@ -167,7 +167,7 @@ def define_explainer_routes(
         else:
             method_id_str = str(neuron_method_id)
         cache_dir = get_local_cached_explanation_directory(dataset_path)
-        return bf.join(
+        return osp.join(
             cache_dir,
             f"cache_{request.dst}_{method_id_str}",
             str(request.layer_index),
@@ -277,12 +277,12 @@ def define_explainer_routes(
         azure_simulation_results, local_simulation_results = None, None
         if azure_path is not None and file_exists(azure_path):
             azure_simulation_results = loads(
-                await bbb.read.read_single(azure_path), backwards_compatible=False
+                await read_single_async(azure_path), backwards_compatible=False
             )
             _verify_cached_simulation_results(request, azure_simulation_results)
         if file_exists(cache_path):
             local_simulation_results = loads(
-                await bbb.read.read_single(cache_path), backwards_compatible=False
+                await read_single_async(cache_path), backwards_compatible=False
             )
             _verify_cached_simulation_results(request, local_simulation_results)
 

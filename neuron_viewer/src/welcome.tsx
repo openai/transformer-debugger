@@ -19,6 +19,17 @@ const Welcome: React.FC = () => {
     async function fetchData() {
       try {
         const result = await readNeuronDatasetsMetadata();
+        setErrorMessage(null);
+        setDatasetsMetadata(result);
+        setIsLoading(false);
+      } catch (error) {
+        if (error instanceof Error) {
+          setErrorMessage(error.message);
+        } else {
+          setErrorMessage("Unknown error");
+        }
+      }
+      try {
         const modelInfo = await getModelInfo();
         if (modelInfo.modelName ?? false) {
           if (modelInfo.hasMlpAutoencoder && modelInfo.hasAttentionAutoencoder) {
@@ -31,15 +42,9 @@ const Welcome: React.FC = () => {
             setTdbUrl(`/${modelInfo.modelName}/tdb_alpha`);
           }
         }
-        setErrorMessage(null);
-        setDatasetsMetadata(result);
-        setIsLoading(false);
       } catch (error) {
-        if (error instanceof Error) {
-          setErrorMessage(error.message);
-        } else {
-          setErrorMessage("Unknown error");
-        }
+        // Continue without TDB link, it just won't be displayed
+        console.error("Failed to get model info", error);
       }
     }
 
