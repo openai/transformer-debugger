@@ -5,8 +5,6 @@ import math
 import os.path as osp
 from dataclasses import dataclass, field
 
-import boostedblob as bbb
-
 from neuron_explainer.fast_dataclasses import FastDataclass, loads, register_dataclass
 from neuron_explainer.file_utils import CustomFileHandler, file_exists, read_single_async
 
@@ -236,14 +234,12 @@ def load_neuron(dataset_path: str, layer: str | int, neuron: str | int) -> Neuro
         return neuron_record
 
 
-@bbb.ensure_session
 async def load_neuron_async(dataset_path: str, layer: str | int, neuron: str | int) -> NeuronRecord:
     """Async version of load_neuron."""
     file = osp.join(dataset_path, str(layer), f"{neuron}.json")
     return await read_neuron_file(file)
 
 
-@bbb.ensure_session
 async def read_neuron_file(neuron_filename: str) -> NeuronRecord:
     """Like load_neuron_async, but takes a raw neuron filename."""
     raw_contents = await read_single_async(neuron_filename)

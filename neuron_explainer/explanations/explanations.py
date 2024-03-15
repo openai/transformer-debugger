@@ -10,8 +10,6 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
-import boostedblob as bbb
-
 from neuron_explainer.activations.activations import NeuronId
 from neuron_explainer.fast_dataclasses import FastDataclass, loads, register_dataclass
 from neuron_explainer.file_utils import CustomFileHandler, file_exists, read_single_async
@@ -268,7 +266,6 @@ def load_neuron_explanations(
     return None
 
 
-@bbb.ensure_session
 async def load_neuron_explanations_async(
     explanations_path: str, layer_index: str | int, neuron_index: str | int
 ) -> NeuronSimulationResults | None:
@@ -278,7 +275,6 @@ async def load_neuron_explanations_async(
     )
 
 
-@bbb.ensure_session
 async def read_file(filename: str) -> str | None:
     """Read the contents of the given file as a string, asynchronously. File can be a
     local file or a remote file."""
@@ -294,14 +290,12 @@ async def read_file(filename: str) -> str | None:
     return lines[0]
 
 
-@bbb.ensure_session
 async def read_explanation_file(explanation_filename: str) -> NeuronSimulationResults | None:
     """Load scored explanations from the given filename, asynchronously."""
     line = await read_file(explanation_filename)
     return loads(line) if line is not None else None
 
 
-@bbb.ensure_session
 async def read_json_file(filename: str) -> dict | None:
     """Read the contents of the given file as a JSON object, asynchronously."""
     line = await read_file(filename)

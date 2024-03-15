@@ -5,8 +5,6 @@ import os
 import re
 import signal
 
-import aiohttp
-import boostedblob as bbb
 import fire
 import torch
 import uvicorn
@@ -127,13 +125,6 @@ def main(
         filename = f"torch_memory_snapshot_{formatted_time}.pkl"
         torch.cuda.memory._dump_snapshot(filename)
         return f"Dumped cuda memory snapshot to {filename}"
-
-    @app.on_event("startup")
-    async def setup_boostedblob() -> None:
-        assert bbb.globals.config.session is None
-        bbb.globals.set_event_loop_exception_handler()
-        connector = aiohttp.TCPConnector(limit=0)
-        bbb.globals.config.session = aiohttp.ClientSession(connector=connector)
 
     if run_model:
         if cuda_memory_debugging:

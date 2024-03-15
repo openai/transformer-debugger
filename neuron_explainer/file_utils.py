@@ -36,6 +36,9 @@ class CustomFileHandler:
                 # Decode the content and use StringIO for text mode (less common for torch.load)
                 self.file = io.StringIO(remote_data.read().decode())
         else:
+            # Create the subdirectories if they don't exist
+            directory = os.path.dirname(self.filepath)
+            os.makedirs(directory, exist_ok=True)
             self.file = open(self.filepath, self.mode)
             if "b" in self.mode:
                 # Ensure the file is seekable; if not, read into a BytesIO object

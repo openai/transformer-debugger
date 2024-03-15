@@ -1,5 +1,4 @@
 import json
-import os
 import os.path as osp
 import pickle
 from concurrent.futures import ThreadPoolExecutor
@@ -764,15 +763,10 @@ def _load_piece(
     disk_cache_path = osp.join(
         "/tmp/neuron-explainer-model-pieces-cache", file_path.replace("https://", "")
     )
-    os.makedirs(osp.dirname(disk_cache_path), exist_ok=True)
-    if file_exists(disk_cache_path):
-        file_path_to_use = disk_cache_path
-    else:
-        file_path_to_use = file_path
-        # Inefficient: we do two reads here, one to cache locally and another to load the tensor.
+    if not file_exists(disk_cache_path):
         copy_to_local_cache(file_path, disk_cache_path)
 
-    with CustomFileHandler(file_path_to_use, "rb") as f:
+    with CustomFileHandler(disk_cache_path, "rb") as f:
         t = torch.load(f, map_location=device)
         if dtype is not None:
             t = t.to(dtype)
