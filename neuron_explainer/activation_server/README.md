@@ -11,16 +11,16 @@ Backend server for getting activation, neuron and explanation data via HTTP, eit
 To run activation server for GPT-2 small:
 
 ```sh
-python main.py --model_name gpt2-small --port 8000
+python neuron_explainer/activation_server/main.py --model_name gpt2-small --port 8000
 ```
 
 To be able to replace MLP neurons with MLP autoencoder latents, and/or attention heads with attention autoencoder latents, 
 the activation server needs to run the corresponding autoencoder:
 
 ```sh
-python main.py  --model_name gpt2-small --port 8000 --mlp_autoencoder_name ae-resid-delta-mlp-v4
-python main.py  --model_name gpt2-small --port 8000 --attn_autoencoder_name ae-resid-delta-attn-v4
-python main.py  --model_name gpt2-small --port 8000 --attn_autoencoder_name ae-resid-delta-attn-v4 --mlp_autoencoder_name ae-resid-delta-mlp-v4
+python neuron_explainer/activation_server/main.py  --model_name gpt2-small --port 8000 --mlp_autoencoder_name ae-resid-delta-mlp-v4
+python neuron_explainer/activation_server/main.py  --model_name gpt2-small --port 8000 --attn_autoencoder_name ae-resid-delta-attn-v4
+python neuron_explainer/activation_server/main.py  --model_name gpt2-small --port 8000 --attn_autoencoder_name ae-resid-delta-attn-v4 --mlp_autoencoder_name ae-resid-delta-mlp-v4
 ```
 
 Running the activation server with autoencoders will add one or two toggle buttons in the Transformer Debugger UI,
