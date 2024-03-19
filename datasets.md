@@ -20,7 +20,7 @@ with the following parameters:
 
 ## GPT-2 small - MLP autoencoders
 
-MLP autoencoders were trained either on the MLP neurons (after the activation function), or on the MLP-layer output that is written to the residual stream. See [Autoencoders for GPT-2 small](neuron_explainer/autoencoder/README.md) for more details. 
+MLP autoencoders were trained either on the MLP neurons (after the activation function), or on the MLP-layer output that is written to the residual stream. See [Autoencoders for GPT-2 small](neuron_explainer/models/README.md#sparse-autoencoder) for more details. 
 
 The datasets are located at the following paths:
 
@@ -34,7 +34,7 @@ with the following parameters:
 
 ## GPT-2 small - Attention autoencoders
 
-Attention autoencoders were trained on the attention-layer output that is written to the residual stream. See [Autoencoders for GPT-2 small](neuron_explainer/autoencoder/README.md) for more details. The `collated-activations` dataset contains autoencoder latent activations for each token, while the `collated-activations-by-token-pair` dataset contains autoencoder latent *attribution* to each token pair. To compute the attribution given an autoencoder latent `L` and a token pair `(T1, T2)`, we multiply the attention pattern `A(T1, T2)` with the gradient of `L` with respect to the attention pattern: `attribution_L(T1, T2) = A(T1, T2) * ∂L/∂A(T1, T2)`. 
+Attention autoencoders were trained on the attention-layer output that is written to the residual stream. See [Autoencoders for GPT-2 small](neuron_explainer/models/README.md#sparse-autoencoder) for more details. The `collated-activations` dataset contains autoencoder latent activations for each token, while the `collated-activations-by-token-pair` dataset contains autoencoder latent *attribution* to each token pair. To compute the attribution given an autoencoder latent `L` and a token pair `(T1, T2)`, we multiply the attention pattern `A(T1, T2)` with the gradient of `L` with respect to the attention pattern: `attribution_L(T1, T2) = A(T1, T2) * ∂L/∂A(T1, T2)`. 
 
 The datasets are located at the following paths:
 
