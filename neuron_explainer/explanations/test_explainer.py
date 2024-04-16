@@ -49,7 +49,7 @@ f	0
 Explanation of neuron 2 behavior:<|endofprompt|> this neuron activates for"""
 
     explainer = TokenActivationPairExplainer(
-        model_name="gpt-4",
+        model_name="gpt-4-turbo",
         prompt_format=PromptFormat.INSTRUCTION_FOLLOWING,
         few_shot_example_set=FewShotExampleSet.TEST,
     )
@@ -115,7 +115,7 @@ Explanation of neuron 2 behavior: this neuron activates for""",
     ]
 
     explainer = TokenActivationPairExplainer(
-        model_name="gpt-4",
+        model_name="gpt-4-turbo",
         prompt_format=PromptFormat.CHAT_MESSAGES,
         few_shot_example_set=FewShotExampleSet.TEST,
     )

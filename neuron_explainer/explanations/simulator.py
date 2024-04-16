@@ -842,7 +842,7 @@ if __name__ == "__main__":
         "21",
         "2932",
     )
-    client = ApiClient(model_name="gpt-4", max_concurrent=5)
+    client = ApiClient(model_name="gpt-4-turbo", max_concurrent=5)
 
     simulator = LogprobFreeExplanationTokenSimulator(
         client=client, explanation="Canada or things related to Canada"
