@@ -6,7 +6,7 @@
 - Has some set of weights that define what the component does
 - Analogy:
     - Component is like the code for a function
-    - Node is like the a specific invocation of a function with specific input values and specific output values
+    - Node is like the specific invocation of a function with specific input values and specific output values
 - When invoked, each component produces nodes that read something from the unnormalized residual stream, then write some vector (the “write vector”) to the unnormalized residual stream
 - Each component is independent from other components of the same type in the same layer
 
