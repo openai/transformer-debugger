@@ -243,7 +243,7 @@ Sequence:\n{format_attention_head_token_pair_string(tokens, simulation_coords)}"
 if __name__ == "__main__":
     # Example usage
     async def main() -> None:
-        scorer = AttentionHeadOneAtATimeScorer("gpt-4-turbo")
+        scorer = AttentionHeadOneAtATimeScorer("gpt-4o")
         explanation = "attends from tokens to the first token in the sequence"
         attention_head = load_neuron(
             "https://openaipublic.blob.core.windows.net/neuron-explainer/gpt2_small/attn_write_norm/collated_activations_by_token_pair",

@@ -64,7 +64,7 @@ class NeuronExplainAndScoreMethodId(BaseMethodId):
 
 _NEURON_EXPLAINER_REGISTRY: dict[NeuronExplainAndScoreMethodId, NeuronExplainer] = {
     NeuronExplainAndScoreMethodId.BASELINE: TokenActivationPairExplainer(
-        model_name="gpt-4-turbo",
+        model_name="gpt-4o",
         cache=True,
         prompt_format=PromptFormat.CHAT_MESSAGES,
     ),
@@ -82,12 +82,12 @@ _ATTENTION_EXPLAINER_REGISTRY: dict[
 ] = {
     AttentionExplainAndScoreMethodId.BASELINE: (
         AttentionHeadExplainer(
-            model_name="gpt-4-turbo",
+            model_name="gpt-4o",
             prompt_format=PromptFormat.CHAT_MESSAGES,
             repeat_strongly_attending_pairs=True,
         ),
         AttentionHeadOneAtATimeScorer(
-            model_name="gpt-4-turbo",
+            model_name="gpt-4o",
             prompt_format=PromptFormat.CHAT_MESSAGES,
         ),
     )
@@ -125,7 +125,7 @@ def define_explainer_routes(
     attention_head_method_id: AttentionExplainAndScoreMethodId,
 ) -> None:
     simulation_client = ApiClient(
-        model_name="gpt-4-turbo",  # turbo model
+        model_name="gpt-4o",
         max_concurrent=5,
         cache=True,
     )
