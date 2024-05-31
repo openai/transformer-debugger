@@ -93,7 +93,13 @@ class Autoencoder(nn.Module):
         n_latents, d_model = state_dict["encoder.weight"].shape
         autoencoder = cls(n_latents, d_model)
         autoencoder.load_state_dict(state_dict, strict=strict)
+        autoencoder.activation = state_dict.get("activation", nn.ReLU())
         return autoencoder
+
+    def state_dict(self, destination=None, prefix='', keep_vars=False):
+        sd = super(Autoencoder, self).state_dict(destination, prefix, keep_vars)
+        sd.update({prefix + 'activation': self.activation})
+        return sd
 
 
 class TiedTranspose(nn.Module):
@@ -112,3 +118,20 @@ class TiedTranspose(nn.Module):
     @property
     def bias(self) -> torch.Tensor:
         return self.linear.bias
+
+
+class TopK(nn.Module):
+    def __init__(self, k: int, postact_fn: Callable | None = nn.ReLU()) -> None:
+        super().__init__()
+        self.k = k
+        self.postact_fn = postact_fn
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        topk = torch.topk(x, k=self.k, dim=-1)
+        values = topk.values
+        if self.postact_fn is not None:
+            values = self.postact_fn(topk.values)
+        # make all other values 0
+        result = torch.zeros_like(x)
+        result.scatter_(-1, topk.indices, values)
+        return result
