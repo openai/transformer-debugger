@@ -145,7 +145,9 @@ class TopK(nn.Module):
         return result
 
     def state_dict(self, destination=None, prefix="", keep_vars=False):
-        return {"k": self.k, "postact_fn": self.postact_fn.__class__.__name__}
+        state_dict = super(TopK, self).state_dict(destination, prefix, keep_vars)
+        state_dict.update({prefix + "k": self.k, prefix + "postact_fn": self.postact_fn.__class__.__name__})
+        return state_dict
 
     @classmethod
     def from_state_dict(cls, state_dict: dict[str, torch.Tensor], strict: bool = True) -> "TopK":
