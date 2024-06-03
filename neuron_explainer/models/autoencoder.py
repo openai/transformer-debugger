@@ -92,7 +92,10 @@ class Autoencoder(nn.Module):
     ) -> "Autoencoder":
         n_latents, d_model = state_dict["encoder.weight"].shape
         autoencoder = cls(n_latents, d_model)
-        activation_class = ACTIVATIONS_CLASSES[state_dict.pop("activation", "ReLU")]
+
+        # Retrieve activation
+        activation_class_name = state_dict.pop("activation", "ReLU")
+        activation_class = ACTIVATIONS_CLASSES.get(activation_class_name, nn.ReLU)
         activation_state_dict = state_dict.pop("activation_state_dict", {})
         if hasattr(activation_class, "from_state_dict"):
             autoencoder.activation = activation_class.from_state_dict(
@@ -100,14 +103,18 @@ class Autoencoder(nn.Module):
             )
         else:
             autoencoder.activation = activation_class()
-            autoencoder.activation.load_state_dict(activation_state_dict, strict=strict)
+            if hasattr(autoencoder.activation, "load_state_dict"):
+                autoencoder.activation.load_state_dict(activation_state_dict, strict=strict)
+
+        # Load remaining state dict
         autoencoder.load_state_dict(state_dict, strict=strict)
         return autoencoder
 
     def state_dict(self, destination=None, prefix="", keep_vars=False):
-        sd = super(Autoencoder, self).state_dict(destination, prefix, keep_vars)
-        sd.update({prefix + "activation": self.activation.__class__.__name__})
-        sd.update({prefix + "activation_state_dict": self.activation.state_dict()})
+        sd = super().state_dict(destination, prefix, keep_vars)
+        sd[prefix + "activation"] = self.activation.__class__.__name__
+        if hasattr(self.activation, "state_dict"):
+            sd[prefix + "activation_state_dict"] = self.activation.state_dict()
         return sd
 
 
@@ -137,7 +144,6 @@ class TopK(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         topk = torch.topk(x, k=self.k, dim=-1)
-        values = topk.values
         values = self.postact_fn(topk.values)
         # make all other values 0
         result = torch.zeros_like(x)
@@ -145,7 +151,7 @@ class TopK(nn.Module):
         return result
 
     def state_dict(self, destination=None, prefix="", keep_vars=False):
-        state_dict = super(TopK, self).state_dict(destination, prefix, keep_vars)
+        state_dict = super().state_dict(destination, prefix, keep_vars)
         state_dict.update({prefix + "k": self.k, prefix + "postact_fn": self.postact_fn.__class__.__name__})
         return state_dict
 
