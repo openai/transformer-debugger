@@ -92,13 +92,22 @@ class Autoencoder(nn.Module):
     ) -> "Autoencoder":
         n_latents, d_model = state_dict["encoder.weight"].shape
         autoencoder = cls(n_latents, d_model)
+        activation_class = ACTIVATIONS_CLASSES[state_dict.pop("activation", "ReLU")]
+        activation_state_dict = state_dict.pop("activation_state_dict", {})
+        if hasattr(activation_class, "from_state_dict"):
+            autoencoder.activation = activation_class.from_state_dict(
+                activation_state_dict, strict=strict
+            )
+        else:
+            autoencoder.activation = activation_class()
+            autoencoder.activation.load_state_dict(activation_state_dict, strict=strict)
         autoencoder.load_state_dict(state_dict, strict=strict)
-        autoencoder.activation = state_dict.get("activation", nn.ReLU())
         return autoencoder
 
-    def state_dict(self, destination=None, prefix='', keep_vars=False):
+    def state_dict(self, destination=None, prefix="", keep_vars=False):
         sd = super(Autoencoder, self).state_dict(destination, prefix, keep_vars)
-        sd.update({prefix + 'activation': self.activation})
+        sd.update({prefix + "activation": self.activation.__class__.__name__})
+        sd.update({prefix + "activation_state_dict": self.activation.state_dict()})
         return sd
 
 
@@ -121,7 +130,7 @@ class TiedTranspose(nn.Module):
 
 
 class TopK(nn.Module):
-    def __init__(self, k: int, postact_fn: Callable | None = nn.ReLU()) -> None:
+    def __init__(self, k: int, postact_fn: Callable = nn.ReLU()) -> None:
         super().__init__()
         self.k = k
         self.postact_fn = postact_fn
@@ -129,9 +138,24 @@ class TopK(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         topk = torch.topk(x, k=self.k, dim=-1)
         values = topk.values
-        if self.postact_fn is not None:
-            values = self.postact_fn(topk.values)
+        values = self.postact_fn(topk.values)
         # make all other values 0
         result = torch.zeros_like(x)
         result.scatter_(-1, topk.indices, values)
         return result
+
+    def state_dict(self, destination=None, prefix="", keep_vars=False):
+        return {"k": self.k, "postact_fn": self.postact_fn.__class__.__name__}
+
+    @classmethod
+    def from_state_dict(cls, state_dict: dict[str, torch.Tensor], strict: bool = True) -> "TopK":
+        k = state_dict["k"]
+        postact_fn = ACTIVATIONS_CLASSES[state_dict["postact_fn"]]()
+        return cls(k=k, postact_fn=postact_fn)
+
+
+ACTIVATIONS_CLASSES = {
+    "ReLU": nn.ReLU,
+    "Identity": nn.Identity,
+    "TopK": TopK,
+}
