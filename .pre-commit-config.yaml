@@ -1,19 +1,19 @@
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.1.9
+    rev: 7bcc70ca475b87e0fdee2511300c74b25babe0b3
     hooks:
       - id: ruff
         args: [--fix, --unsafe-fixes, --fix-only, --exit-non-zero-on-fix]
         files: neuron_explainer
 
   - repo: https://github.com/hauntsaninja/black-pre-commit-mirror
-    rev: 23.10.0
+    rev: 91867dbada8a528dcc51a369d95a9d11a81a26a8
     hooks:
       - id: black
         args: [--line-length=100, --exclude="", --workers=6]
 
   - repo: https://github.com/pycqa/isort
-    rev: 5.12.0
+    rev: e44834b7b294701f596c9118d6c370f86671a50d
     hooks:
       - id: isort
         args: [--line-length=100, --profile=black, --settings-path=.isort.cfg]
