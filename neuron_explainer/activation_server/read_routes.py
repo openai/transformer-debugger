@@ -344,7 +344,7 @@ def normalize_attention_token_scalars(
     a. one way to summarize is to compute a summary statistic on the "scalars in", which are
     the list of floats associated to each token.
     b. the other way is to compute a summary statistic on the "scalars out", which are the
-    ith entry in each list of of floats that contains an ith entry.
+    ith entry in each list of floats that contains an ith entry.
     i. one summary statistic used is the "total", or sum of all scalars in or out
     ii. another summary statistic used is the "max", or maximum of all scalars in or out
 
