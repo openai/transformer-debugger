@@ -12,7 +12,7 @@ from neuron_explainer.models.model_component_registry import Dimension, LayerInd
 
 @dataclass(frozen=True)
 class AutoencoderSpec:
-    """Parameters used in the construction of an AutoencoderConfig object. Seperate so we don't need to validate when constructed"""
+    """Parameters used in the construction of an AutoencoderConfig object. Separate so we don't need to validate when constructed"""
 
     dst: DerivedScalarType
     autoencoder_path_by_layer_index: dict[LayerIndex, str]
